@@ -30,6 +30,35 @@ import java.nio.file.{FileVisitResult, Files, Path, SimpleFileVisitor}
   * Desktop utilities
   */
 object DesktopUtils {
+  private class DeltreeVisitor extends SimpleFileVisitor[Path]() {
+    var _errorsFound = false
+
+    def errorsFound = _errorsFound
+
+    override def visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult = {
+      try {
+        Files.delete(file)
+        FileVisitResult.CONTINUE
+      } catch {
+        case _: Exception =>
+          _errorsFound = true
+          FileVisitResult.TERMINATE
+      }
+    }
+
+    override def postVisitDirectory(dir: Path, exc: IOException): FileVisitResult = {
+      try {
+        Files.delete(dir)
+        FileVisitResult.CONTINUE
+      } catch {
+        case _: Exception =>
+          _errorsFound = true
+          FileVisitResult.TERMINATE
+      }
+    }
+  }
+
+  
   private def runInThread(action: (Desktop) => Unit) {
     val externalThread = new Thread() {
       override def run() {
@@ -94,34 +123,7 @@ object DesktopUtils {
 
     require(Files.isDirectory(directory))
 
-
-    val visitor = new SimpleFileVisitor[Path]() {
-      var _errorsFound = false
-
-      def errorsFound = _errorsFound
-
-      override def visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult = {
-        try {
-          Files.delete(file)
-          FileVisitResult.CONTINUE
-        } catch {
-          case _: Exception =>
-            _errorsFound = true
-            FileVisitResult.TERMINATE
-        }
-      }
-
-      override def postVisitDirectory(dir: Path, exc: IOException): FileVisitResult = {
-        try {
-          Files.delete(dir)
-          FileVisitResult.CONTINUE
-        } catch {
-          case _: Exception =>
-            _errorsFound = true
-            FileVisitResult.TERMINATE
-        }
-      }
-    }
+    val visitor = new DeltreeVisitor
 
     Files.walkFileTree(directory, visitor)
 
