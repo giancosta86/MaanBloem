@@ -38,7 +38,7 @@ class App extends Application {
     primaryStage.setWidth(1200)
     primaryStage.setHeight(700)
 
-    primaryStage.setTitle(AppInfo.name)
+    primaryStage.setTitle(s"${AppInfo.name} - ${AppInfo.description}")
     primaryStage.getIcons.add(AppInfo.mainIcon)
 
     val loadingScene = new LoadingScene

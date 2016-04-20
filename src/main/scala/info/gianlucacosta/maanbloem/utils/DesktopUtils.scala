@@ -31,6 +31,10 @@ import java.nio.file.{FileVisitResult, Files, Path, SimpleFileVisitor}
   */
 object DesktopUtils {
 
+  type ExceptionCallback = (Exception) => Unit
+
+  private val EmptyExceptionCallBack: ExceptionCallback = (ex: Exception) => {}
+
   private class DeltreeVisitor extends SimpleFileVisitor[Path]() {
     var _errorsFound = false
 
@@ -60,39 +64,57 @@ object DesktopUtils {
   }
 
 
-  private def runInThread(action: (Desktop) => Unit) {
+  private def runInThread(action: (Desktop) => Unit, exceptionCallback: ExceptionCallback) {
     val externalThread = new Thread() {
       override def run() {
-        val desktop = Desktop.getDesktop
+        try {
+          val desktop = Desktop.getDesktop
 
-        if (desktop == null) {
-          throw new UnsupportedOperationException()
+          if (desktop == null) {
+            throw new UnsupportedOperationException("Desktop not available")
+          }
+
+          action(desktop)
+        } catch {
+          case ex: Exception =>
+            exceptionCallback(ex)
         }
-
-        action(desktop)
       }
     }
+
     externalThread.start()
   }
 
 
   /**
-    * Opens the given URL in a browser, without freezing the app
+    * Opens the given URL in a browser, without freezing the app.
     *
-    * @param url
+    * Throws an exception in case of errors.
+    *
+    * @param url               The url to open
+    * @param exceptionCallback Callback to call in case of exception
     */
-  def openBrowser(url: String) {
-    runInThread(desktop => desktop.browse(new URI(url)))
+  def openBrowser(url: String, exceptionCallback: ExceptionCallback = EmptyExceptionCallBack) {
+    runInThread(
+      desktop => desktop.browse(new URI(url)),
+      exceptionCallback
+    )
   }
 
 
   /**
-    * Opens the given file using the user's desktop environment settings, without freezing the app
+    * Opens the given file using the user's desktop environment settings, without freezing the app.
     *
-    * @param file
+    * Throws an exception in case of errors.
+    *
+    * @param file              The file to open
+    * @param exceptionCallback Callback to call in case of exception
     */
-  def openFile(file: File): Unit = {
-    runInThread(desktop => desktop.open(file))
+  def openFile(file: File, exceptionCallback: ExceptionCallback = EmptyExceptionCallBack): Unit = {
+    runInThread(
+      desktop => desktop.open(file),
+      exceptionCallback
+    )
   }
 
   /**

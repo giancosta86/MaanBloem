@@ -32,6 +32,7 @@ import info.gianlucacosta.maanbloem.utils.DesktopUtils
 
 import scala.collection.JavaConversions._
 import scalafx.Includes._
+import scalafx.application.Platform
 import scalafx.event.ActionEvent
 import scalafx.geometry.{Insets, Pos}
 import scalafx.scene.Scene
@@ -75,10 +76,27 @@ class MainScene(descriptors: List[Descriptor]) extends Scene {
 
         children = Seq(
           new Button {
-            id = "detailsButton"
+            id = "runButton"
+            styleClass += "appButton"
 
-            minWidth = 150
-            prefHeight = 40
+            text = "Run app"
+
+            disable <== descriptorTable.selectionModel.value.selectedIndexProperty() === -1
+
+            handleEvent(ActionEvent.Action) {
+              (actionEvent: ActionEvent) => {
+                actionEvent.consume()
+
+                val descriptor = descriptorTable.selectionModel.value.getSelectedItem
+                startApp(descriptor)
+              }
+            }
+          },
+
+          new Button {
+            id = "detailsButton"
+            styleClass += "appButton"
+
             text = "Details..."
 
             disable <== descriptorTable.selectionModel.value.selectedIndexProperty() === -1
@@ -95,8 +113,8 @@ class MainScene(descriptors: List[Descriptor]) extends Scene {
 
           new Button {
             id = "uninstallButton"
-            minWidth = 150
-            prefHeight = 40
+            styleClass += "appButton"
+
             text = "Uninstall..."
 
             disable <== descriptorTable.selectionModel.value.selectedIndexProperty() === -1
@@ -130,6 +148,8 @@ class MainScene(descriptors: List[Descriptor]) extends Scene {
                         ex,
                         s"${descriptor.name} ${descriptor.appVersion}"
                       )
+
+                      ex.printStackTrace(System.err)
                   }
                 }
 
@@ -151,16 +171,23 @@ class MainScene(descriptors: List[Descriptor]) extends Scene {
       new Button {
         id = "websiteButton"
 
-        prefWidth = 300
-        prefHeight = 36
-
         text = s"Visit ${AppInfo.name}'s website"
 
         handleEvent(ActionEvent.Action) {
           (actionEvent: ActionEvent) => {
             actionEvent.consume()
 
-            DesktopUtils.openBrowser(AppInfo.website)
+            DesktopUtils.openBrowser(
+              AppInfo.website,
+
+              (exception: Exception) => {
+                exception.printStackTrace(System.err)
+
+                Platform.runLater {
+                  Alerts.showWarning("Cannot open the web browser")
+                }
+              }
+            )
           }
         }
       }
@@ -175,6 +202,21 @@ class MainScene(descriptors: List[Descriptor]) extends Scene {
       galleryBox,
       descriptorBox,
       genericButtonsBox
+    )
+  }
+
+
+  private def startApp(descriptor: Descriptor): Unit = {
+    DesktopUtils.openFile(
+      descriptor.descriptorPath.toFile,
+
+      ex => {
+        ex.printStackTrace(System.err)
+
+        Platform.runLater {
+          Alerts.showWarning("Cannot run the selected app.\n\nIs MoonDeploy associated with files having .moondeploy extension?")
+        }
+      }
     )
   }
 

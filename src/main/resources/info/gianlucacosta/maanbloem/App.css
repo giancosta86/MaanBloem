@@ -3,26 +3,6 @@
 }
 
 
-#detailsButton {
-    -fx-background-image: url('/info/gianlucacosta/maanbloem/buttons/details.png');
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: 10 center;
-}
-
-
-#uninstallButton {
-    -fx-background-image: url('/info/gianlucacosta/maanbloem/buttons/uninstall.png');
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: 10 center;
-}
-
-
-#websiteButton {
-    -fx-background-image: url('/info/gianlucacosta/maanbloem/buttons/website.png');
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: 10 center;
-}
-
 
 .table-row-cell:empty {
     -fx-background-color: white;
@@ -30,4 +10,39 @@
 
 .table-row-cell:empty .table-cell {
     -fx-border-width: 0px;
+}
+
+
+
+.appButton {
+    -fx-min-width: 150;
+    -fx-pref-height: 40;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: 10 center;
+}
+
+
+#runButton {
+    -fx-background-image: url('/info/gianlucacosta/maanbloem/buttons/run.png');
+}
+
+
+#detailsButton {
+    -fx-background-image: url('/info/gianlucacosta/maanbloem/buttons/details.png');
+}
+
+
+#uninstallButton {
+    -fx-background-image: url('/info/gianlucacosta/maanbloem/buttons/uninstall.png');
+}
+
+
+
+#websiteButton {
+    -fx-background-image: url('/info/gianlucacosta/maanbloem/buttons/website.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: 10 center;
+
+    -fx-pref-width: 260;
+    -fx-pref-height: 36;
 }

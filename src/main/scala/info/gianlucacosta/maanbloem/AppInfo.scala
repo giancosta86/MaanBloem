@@ -24,6 +24,7 @@ import scalafx.scene.image.Image
 
 object AppInfo {
   val name = "MaanBloem"
+  val description = "App manager for MoonDeploy"
   val website = "http://gianlucacosta.info/MaanBloem"
 
   val mainIcon = new Image(getResource("mainIcon.png"))
