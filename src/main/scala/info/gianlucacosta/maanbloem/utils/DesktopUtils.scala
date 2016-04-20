@@ -30,6 +30,7 @@ import java.nio.file.{FileVisitResult, Files, Path, SimpleFileVisitor}
   * Desktop utilities
   */
 object DesktopUtils {
+
   private class DeltreeVisitor extends SimpleFileVisitor[Path]() {
     var _errorsFound = false
 
@@ -58,7 +59,7 @@ object DesktopUtils {
     }
   }
 
-  
+
   private def runInThread(action: (Desktop) => Unit) {
     val externalThread = new Thread() {
       override def run() {

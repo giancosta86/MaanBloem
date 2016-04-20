@@ -24,9 +24,12 @@ import java.io.File
 import javafx.beans.property.ReadOnlyObjectWrapper
 import javafx.collections.ObservableList
 
+import info.gianlucacosta.maanbloem.AppInfo
 import info.gianlucacosta.maanbloem.moondeploy.descriptors.Descriptor
+import net.sf.image4j.codec.ico.ICODecoder
 
 import scalafx.Includes._
+import scalafx.embed.swing.SwingFXUtils
 import scalafx.geometry.{Insets, Pos}
 import scalafx.scene.control.TableColumn._
 import scalafx.scene.control.{Label, TableCell, TableColumn, TableView}
@@ -37,6 +40,7 @@ import scalafx.scene.layout.Priority
 class DescriptorTableView(fxDescriptors: ObservableList[Descriptor]) extends TableView[Descriptor](fxDescriptors) {
   private val IconSize = 64
   private val CellPadding = 10
+  private val DefaultIconImage = new Image(AppInfo.getResource("moondeploy.png"), IconSize, IconSize, true, true)
 
   hgrow = Priority.Always
 
@@ -52,18 +56,11 @@ class DescriptorTableView(fxDescriptors: ObservableList[Descriptor]) extends Tab
 
       cellFactory = { _: TableColumn[Descriptor, Option[File]] =>
         new TableCell[Descriptor, Option[File]] {
-          item.onChange { (_, _, newValue) =>
-            if (newValue != null) {
-              val iconUrl =
-                if (newValue.isDefined) {
-                  "file:" + newValue.get.getAbsolutePath
-                } else {
-                  "/info/gianlucacosta/maanbloem/moondeploy.png"
-                }
+          item.onChange { (_, _, newIconFileOption) =>
+            if (newIconFileOption != null) {
+              val iconImage = getIconImage(newIconFileOption)
 
-              val icon = new Image(iconUrl, IconSize, IconSize, true, true)
-
-              graphic = new ImageView(icon)
+              graphic = new ImageView(iconImage)
 
               padding = Insets(CellPadding)
             }
@@ -113,6 +110,34 @@ class DescriptorTableView(fxDescriptors: ObservableList[Descriptor]) extends Tab
       cellFactory = createLabelCellFactory()
     }
   )
+
+
+  private def getIconImage(iconFileOption: Option[File]): Image = {
+    if (iconFileOption.isEmpty) {
+      return DefaultIconImage
+    }
+
+    val iconFile = iconFileOption.get
+
+    if (iconFile.getName.endsWith(".ico")) {
+      try {
+        val iconComponents = ICODecoder.read(iconFile)
+        if (iconComponents == null || iconComponents.isEmpty) {
+          return DefaultIconImage
+        }
+
+        val mainComponent = iconComponents.get(0)
+        SwingFXUtils.toFXImage(mainComponent, null)
+      } catch {
+        case _: Exception =>
+          DefaultIconImage
+      }
+    } else {
+      val iconUrl = "file:" + iconFile.getAbsolutePath
+
+      new Image(iconUrl, IconSize, IconSize, true, true)
+    }
+  }
 
 
   private def createLabelCellFactory() = { column: TableColumn[Descriptor, String] =>
