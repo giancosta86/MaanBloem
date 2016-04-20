@@ -39,7 +39,9 @@ Alternatively, you might want to download the binary zip and execute one of the 
 
 ## Special thanks
 
-The icons in the buttons are part of the [Crystal Clear icon set](https://commons.wikimedia.org/wiki/Crystal_Clear), by [Everaldo Coelho](https://en.wikipedia.org/wiki/Everaldo_Coelho).
+* To open **.ico** files, MaanBloem employs [image4j](http://image4j.sourceforge.net/)
+
+* The icons in the buttons are part of the [Crystal Clear icon set](https://commons.wikimedia.org/wiki/Crystal_Clear), by [Everaldo Coelho](https://en.wikipedia.org/wiki/Everaldo_Coelho).
 
 
 
