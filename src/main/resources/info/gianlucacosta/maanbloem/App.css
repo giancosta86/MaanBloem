@@ -1,0 +1,33 @@
+#appGalleryPrompt {
+    -fx-font-weight: bold;
+}
+
+
+#detailsButton {
+    -fx-background-image: url('/info/gianlucacosta/maanbloem/buttons/details.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: 10 center;
+}
+
+
+#uninstallButton {
+    -fx-background-image: url('/info/gianlucacosta/maanbloem/buttons/uninstall.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: 10 center;
+}
+
+
+#websiteButton {
+    -fx-background-image: url('/info/gianlucacosta/maanbloem/buttons/website.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: 10 center;
+}
+
+
+.table-row-cell:empty {
+    -fx-background-color: white;
+}
+
+.table-row-cell:empty .table-cell {
+    -fx-border-width: 0px;
+}
