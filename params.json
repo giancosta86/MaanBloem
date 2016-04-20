@@ -1,0 +1,6 @@
+{
+  "name": "MaanBloem",
+  "tagline": "App manager for MoonDeploy",
+  "body": "# MaanBloem\r\n\r\n*App manager for MoonDeploy*\r\n\r\n\r\n## Introduction\r\n\r\n![Apps](screenshots/apps.png)\r\n\r\n[MoonDeploy](http://gianlucacosta.info/MoonDeploy) is a lightweight tool for software deployment: in particular, users can manage their app gallery using their favorite file explorer.\r\n\r\n**MaanBloem** is a simple ScalaFX application simplifying app management even further:\r\n\r\n* It automatically scans the app gallery, finding and listing every installed app\r\n\r\n* It can show additional details about each app\r\n\r\n* Quick & easy app removal - via the *Uninstall...* button\r\n\r\n\r\n## Requirements\r\n\r\nIn order to start MaanBloem, **Java 8u65** or later compatible is recommended\r\n\r\n\r\n## Running the app\r\n\r\nMaanBloem is a [MoonDeploy](http://gianlucacosta.info/MoonDeploy) app, too! ^\\_\\_^\r\n\r\nTherefore, the suggested way to run the app consists in clicking on the *Run with MoonDeploy* button and opening the app descriptor with MoonDeploy.\r\n\r\nAlternatively, you might want to download the binary zip and execute one of the scripts in the **bin** subdirectory.",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}
