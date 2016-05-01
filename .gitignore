@@ -2,3 +2,4 @@
 /.gradle
 /build
 /*.iml
+/src/main/scala/info/gianlucacosta/maanbloem/ArtifactInfo.scala

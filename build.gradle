@@ -28,26 +28,29 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.1'
-        classpath 'info.gianlucacosta.aurora:aurora:2.1'
-        classpath 'info.gianlucacosta.moonlicense:moonlicense-gradle:4.0'
-        classpath 'info.gianlucacosta.moondeploy:moondeploy-gradle:3.1'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'
+        classpath 'info.gianlucacosta.moonlicense:moonlicense-gradle:4.1'
+        classpath 'info.gianlucacosta.moondeploy:moondeploy-gradle:3.2'
+        classpath 'info.gianlucacosta.aurora:aurora:4.1'
     }
 }
 
 
 apply plugin: 'scala'
-apply plugin: 'info.gianlucacosta.aurora'
-apply plugin: 'info.gianlucacosta.moondeploy'
 apply plugin: 'application'
+apply plugin: 'info.gianlucacosta.moonlicense'
+apply plugin: 'info.gianlucacosta.moondeploy'
+apply plugin: 'info.gianlucacosta.aurora'
 
 
 group 'info.gianlucacosta.maanbloem'
 archivesBaseName = 'maanbloem'
-version '1.1'
+version '1.2'
 
 
 description = 'App manager for MoonDeploy'
+
+ext.facebookPage = "https://www.facebook.com/MoonDeploy"
 
 
 mainClassName = "info.gianlucacosta.maanbloem.App"
@@ -57,6 +60,7 @@ repositories {
     mavenCentral()
 }
 
+
 dependencies {
     compile 'org.scala-lang:scala-library:2.11.8'
     compile 'org.scalafx:scalafx_2.11:8.0.60-R9'
@@ -65,37 +69,6 @@ dependencies {
     compile 'org.glassfish:javax.json:1.0.4'
 
     compile 'org.jclarion:image4j:0.7'
-}
-
-
-startScripts {
-    def originalWindowsTemplateString = windowsStartScriptGenerator.template.asString()
-    def javawTemplateString =
-            originalWindowsTemplateString
-                    .replace("java.exe", "javaw.exe")
-                    .replace("\"%JAVA_EXE%\" %DEFAULT_JVM_OPTS%", "start \"\" /B \"%JAVA_EXE%\" %DEFAULT_JVM_OPTS%")
-    def javawTemplate = project.resources.text.fromString(javawTemplateString)
-    windowsStartScriptGenerator.template = javawTemplate
-}
-
-
-aurora {
-    docTask = 'scaladoc'
-    gitHubUser = 'giancosta86'
-
-    author {
-        name = 'Gianluca Costa'
-        email = 'gianluca@gianlucacosta.info'
-        url = 'http://gianlucacosta.info/'
-    }
-
-    bintray {
-        user = project.bintrayUser
-        key = project.bintrayKey
-        repo = 'Hephaestus'
-        licenses = ['Apache-2.0']
-        labels = ['MoonDeploy', 'app', 'manager']
-    }
 }
 
 
@@ -110,39 +83,19 @@ moonLicense {
 }
 
 
+aurora {
+    gitHubUser = 'giancosta86'
 
-task createAppDescriptor {
-    dependsOn(distZip)
-} << {
-    ant.moonDeploy(
-            baseURL: "${project.url}/releases/latest",
+    author {
+        name = 'Gianluca Costa'
+        email = 'gianluca@gianlucacosta.info'
+        url = 'http://gianlucacosta.info/'
+    }
 
-            name: "${moonLicense.productInfo.productName}",
-            version: project.version,
-
-            description: project.description,
-            publisher: "Gianluca Costa",
-
-            skipPackageLevels: 1,
-
-            iconPath: "mainIcon.png"
-    ) {
-        commandLine {
-            param("bash")
-            param("bin/${project.name}")
-        }
-
-        pkg(name: "${project.name}-${project.version}.zip")
-
-        os(
-                name: "windows",
-                iconPath: "mainIcon.ico"
-        ) {
-            commandLine {
-                param("bin\\${project.name}.bat")
-            }
-        }
+    javaVersion {
+      major = 1
+      minor = 8
+      build = 0
+      update = 65
     }
 }
-
-tasks["assemble"].dependsOn("createAppDescriptor")
