@@ -25,7 +25,7 @@ import java.net.URL
 import java.nio.file.Path
 import javax.json.{Json, JsonObject, JsonString}
 
-import info.gianlucacosta.maanbloem.utils.DesktopUtils
+import info.gianlucacosta.helios.desktop.Os
 
 
 object DescriptorParser {
@@ -83,11 +83,11 @@ object DescriptorParser {
 
 
   private def getCurrentGoOs: String =
-    if (DesktopUtils.isLinux) {
+    if (Os.isLinux) {
       "linux"
-    } else if (DesktopUtils.isWindows) {
+    } else if (Os.isWindows) {
       "windows"
-    } else if (DesktopUtils.isMac) {
+    } else if (Os.isMac) {
       "darwin"
     } else {
       throw new RuntimeException("Unsupported OS")

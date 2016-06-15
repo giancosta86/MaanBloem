@@ -1,5 +1,5 @@
 /.idea
 /.gradle
-/build
+/build/**
 /*.iml
-/src/main/scala/info/gianlucacosta/maanbloem/ArtifactInfo.scala
+/src/generated/**

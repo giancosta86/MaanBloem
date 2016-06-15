@@ -21,13 +21,18 @@
 package info.gianlucacosta.maanbloem.moondeploy.descriptors
 
 import java.io.{File, FileFilter, IOException}
-import java.nio.file.Path
+import java.nio.file.{Files, Path}
 
 import scala.collection.mutable
 
 
 object DescriptorFinder {
   def findDescriptors(galleryDirectory: Path): List[Path] = {
+    if (!Files.isDirectory(galleryDirectory)) {
+      return List()
+    }
+
+
     val descriptors = mutable.MutableList[Path]()
 
     visitDirectory(galleryDirectory.toFile, descriptors)

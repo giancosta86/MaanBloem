@@ -21,32 +21,51 @@
 package info.gianlucacosta.maanbloem
 
 
-import javafx.application.Application
 import javafx.stage.Stage
 
-import info.gianlucacosta.maanbloem.ui.{LoadingScene, LoadingThread}
+import info.gianlucacosta.helios.apps.{AppInfo, AuroraAppInfo}
+import info.gianlucacosta.helios.fx.apps.{AppBase, AppMain, SplashStage}
+import info.gianlucacosta.maanbloem.icons.MainIcon
+import info.gianlucacosta.maanbloem.moondeploy.MoonSettings
+import info.gianlucacosta.maanbloem.moondeploy.descriptors.{DescriptorFinder, DescriptorParser}
+import info.gianlucacosta.maanbloem.ui.MainScene
+
+import scalafx.application.Platform
 
 
-object App {
-  def main(args: Array[String]): Unit = {
-    Application.launch(classOf[App], args: _*)
+object App extends AppMain[App](classOf[App])
+
+class App extends AppBase(AuroraAppInfo(ArtifactInfo, MainIcon)) {
+  override def startup(appInfo: AppInfo, splashStage: SplashStage, primaryStage: Stage): Unit = {
+    splashStage.statusText = "Analyzing app descriptors..."
+
+    val appGalleryPath = MoonSettings.appGalleryDirectory
+
+    val descriptors =
+      DescriptorFinder
+        .findDescriptors(appGalleryPath)
+        .map(DescriptorParser.parse)
+        .filter(_.isDefined)
+        .map(_.get)
+
+    var mainScene: MainScene = null
+
+
+    splashStage.statusText = "Initializing the window..."
+
+    Platform.runLater {
+      mainScene = new MainScene(appInfo, descriptors)
+    }
+
+    Platform.runLater {
+      primaryStage.setScene(mainScene)
+    }
+
+    Platform.runLater {
+      primaryStage.setWidth(1200)
+      primaryStage.setHeight(700)
+      primaryStage.centerOnScreen()
+    }
   }
 }
 
-class App extends Application {
-  override def start(primaryStage: Stage): Unit = {
-    primaryStage.setWidth(1200)
-    primaryStage.setHeight(700)
-
-    primaryStage.setTitle(s"${AppInfo.name} - ${AppInfo.description}")
-    primaryStage.getIcons.add(AppInfo.mainIcon)
-
-    val loadingScene = new LoadingScene
-    primaryStage.setScene(loadingScene)
-
-    primaryStage.show()
-
-    val loadingThread = new LoadingThread(primaryStage)
-    loadingThread.start()
-  }
-}

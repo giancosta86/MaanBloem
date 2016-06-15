@@ -24,7 +24,7 @@ import java.io.{File, FileReader}
 import java.nio.file.Paths
 import javax.json.Json
 
-import info.gianlucacosta.maanbloem.utils.DesktopUtils
+import info.gianlucacosta.helios.desktop.DesktopUtils
 
 object MoonSettings {
   lazy val localDirectory = {

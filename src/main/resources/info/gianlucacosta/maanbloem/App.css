@@ -38,8 +38,8 @@
 
 
 
-#websiteButton {
-    -fx-background-image: url('/info/gianlucacosta/maanbloem/buttons/website.png');
+#aboutButton {
+    -fx-background-image: url('/info/gianlucacosta/maanbloem/buttons/about.png');
     -fx-background-repeat: no-repeat;
     -fx-background-position: 10 center;
 

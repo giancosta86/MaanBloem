@@ -28,9 +28,9 @@ buildscript {
     }
 
     dependencies {
-        classpath 'info.gianlucacosta.moonlicense:moonlicense-gradle:4.1'
-        classpath 'info.gianlucacosta.moondeploy:moondeploy-gradle:3.2'
-        classpath 'info.gianlucacosta.aurora:aurora:4.4'
+        classpath 'info.gianlucacosta.moonlicense:moonlicense-gradle:4.3'
+        classpath 'info.gianlucacosta.moondeploy:moondeploy-gradle:3.3'
+        classpath 'info.gianlucacosta.aurora:aurora:6.1'
     }
 }
 
@@ -44,7 +44,7 @@ apply plugin: 'info.gianlucacosta.aurora'
 
 group 'info.gianlucacosta.maanbloem'
 archivesBaseName = 'maanbloem'
-version '1.4'
+version '2.0'
 
 
 description = 'App manager for MoonDeploy'
@@ -61,13 +61,16 @@ repositories {
 
 
 dependencies {
+    generatedCompile 'org.scala-lang:scala-library:2.11.8'
+
     compile 'org.scala-lang:scala-library:2.11.8'
-    compile 'org.scalafx:scalafx_2.11:8.0.60-R9'
 
     compile 'javax.json:javax.json-api:1.0'
     compile 'org.glassfish:javax.json:1.0.4'
 
     compile 'org.jclarion:image4j:0.7'
+
+    compile 'info.gianlucacosta.helios:helios-core:2.5'
 }
 
 
@@ -92,9 +95,9 @@ aurora {
     }
 
     javaVersion {
-      major = 1
-      minor = 8
-      build = 0
-      update = 65
+        major = 1
+        minor = 8
+        build = 0
+        update = 91
     }
 }

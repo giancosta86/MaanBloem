@@ -25,10 +25,14 @@ import java.nio.file._
 import java.util
 import javafx.collections.FXCollections
 
-import info.gianlucacosta.maanbloem.AppInfo
+import info.gianlucacosta.helios.apps.AppInfo
+import info.gianlucacosta.helios.desktop.DesktopUtils
+import info.gianlucacosta.helios.files.FileUtils
+import info.gianlucacosta.helios.fx.about.AboutBox
+import info.gianlucacosta.helios.fx.dialogs.{Alerts, InputDialogs}
+import info.gianlucacosta.maanbloem.App
 import info.gianlucacosta.maanbloem.moondeploy.MoonSettings
 import info.gianlucacosta.maanbloem.moondeploy.descriptors.Descriptor
-import info.gianlucacosta.maanbloem.utils.DesktopUtils
 
 import scala.collection.JavaConversions._
 import scalafx.Includes._
@@ -39,9 +43,11 @@ import scalafx.scene.Scene
 import scalafx.scene.control._
 import scalafx.scene.layout.{HBox, Priority, VBox}
 
-class MainScene(descriptors: List[Descriptor]) extends Scene {
+class MainScene(appInfo: AppInfo, descriptors: List[Descriptor]) extends Scene {
+  private val aboutBox = new AboutBox(appInfo)
+
   stylesheets.add(
-    AppInfo.getResource("App.css")
+    App.getResource("App.css").toExternalForm
   )
 
   val galleryBox = new HBox {
@@ -148,8 +154,6 @@ class MainScene(descriptors: List[Descriptor]) extends Scene {
                         ex,
                         s"${descriptor.name} ${descriptor.appVersion}"
                       )
-
-                      ex.printStackTrace(System.err)
                   }
                 }
 
@@ -169,25 +173,15 @@ class MainScene(descriptors: List[Descriptor]) extends Scene {
 
     children = Seq(
       new Button {
-        id = "websiteButton"
+        id = "aboutButton"
 
-        text = s"Visit ${AppInfo.name}'s website"
+        text = s"About ${appInfo.name}..."
 
         handleEvent(ActionEvent.Action) {
           (actionEvent: ActionEvent) => {
             actionEvent.consume()
 
-            DesktopUtils.openBrowser(
-              AppInfo.website,
-
-              (exception: Exception) => {
-                exception.printStackTrace(System.err)
-
-                Platform.runLater {
-                  Alerts.showWarning("Cannot open the web browser")
-                }
-              }
-            )
+            aboutBox.show()
           }
         }
       }
@@ -230,7 +224,7 @@ class MainScene(descriptors: List[Descriptor]) extends Scene {
 
 
   private def uninstall(descriptor: Descriptor): Unit = {
-    if (!DesktopUtils.deltree(descriptor.appDirectory)) {
+    if (!FileUtils.deltree(descriptor.appDirectory)) {
       throw new IOException("Could not uninstall the app")
     }
 
