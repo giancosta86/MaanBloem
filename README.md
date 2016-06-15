@@ -15,12 +15,12 @@
 
 * It can show additional details about each app
 
-* Quick & easy app removal - via the *Uninstall...* button
+* Quick and easy app removal - via the *Uninstall...* button
 
 
 ## Requirements
 
-In order to start MaanBloem, **Java 8u65** or later compatible is recommended
+In order to start MaanBloem, **Java 8u91** or later compatible is recommended
 
 
 ## Running the app
