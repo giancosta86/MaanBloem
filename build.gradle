@@ -44,7 +44,7 @@ apply plugin: 'info.gianlucacosta.aurora'
 
 group 'info.gianlucacosta.maanbloem'
 archivesBaseName = 'maanbloem'
-version '2.0'
+version '2.1'
 
 
 description = 'App manager for MoonDeploy'
@@ -70,7 +70,7 @@ dependencies {
 
     compile 'org.jclarion:image4j:0.7'
 
-    compile 'info.gianlucacosta.helios:helios-core:2.5'
+    compile 'info.gianlucacosta.helios:helios-fx:5.0'
 }
 
 
