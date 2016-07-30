@@ -49,4 +49,4 @@ Alternatively, you might want to download the binary zip and execute one of the 
 
 * [MoonDeploy](http://gianlucacosta.info/moondeploy)
 
-* [Helios-core](https://github.com/giancosta86/Helios-core)
+* [Helios-fx](https://github.com/giancosta86/Helios-fx)
